@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Community, Our Stories — WebQuest</title>
+<style>
+  :root{
+    --bg:#f7f4ec;
+    --card:#ffffff;
+    --ink:#17324d;
+    --accent:#2d6a4f;
+    --accent2:#d4a373;
+    --soft:#e9f5ef;
+    --soft2:#f6eadf;
+    --line:#d9e2e8;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: "Aptos", "Segoe UI", Arial, sans-serif;
+    color:var(--ink);
+    background:linear-gradient(180deg,#f7f4ec 0%,#eef6f2 100%);
+    line-height:1.55;
+  }
+  header{
+    position:sticky; top:0; z-index:20;
+    background:rgba(255,255,255,.96);
+    border-bottom:1px solid var(--line);
+    backdrop-filter: blur(8px);
+  }
+  .nav{
+    max-width:1100px; margin:auto; padding:12px 18px;
+    display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+  }
+  .brand{font-weight:800; margin-right:auto}
+  .nav button{
+    border:0; border-radius:999px; padding:9px 14px; cursor:pointer;
+    background:#eef3f6; color:var(--ink); font-weight:700;
+  }
+  .nav button.active,.nav button:hover{background:var(--accent); color:white}
+  .wrap{max-width:1100px; margin:auto; padding:28px 18px 60px}
+  .page{display:none}
+  .page.active{display:block; animation:fade .25s ease}
+  @keyframes fade{from{opacity:.3; transform:translateY(4px)}to{opacity:1; transform:none}}
+  .hero{
+    background:linear-gradient(135deg,var(--accent),#40916c);
+    color:white; padding:48px 34px; border-radius:28px; box-shadow:0 14px 34px rgba(23,50,77,.12)
+  }
+  h1{font-size:clamp(2rem,5vw,4rem); margin:.1em 0}
+  h2{font-size:clamp(1.5rem,3vw,2.4rem); margin-top:0}
+  h3{margin-bottom:.35rem}
+  .subtitle{font-size:1.15rem; max-width:760px}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; margin:22px 0}
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:20px; padding:20px;
+    box-shadow:0 8px 24px rgba(23,50,77,.07)
+  }
+  .clickable{cursor:pointer; transition:.18s ease}
+  .clickable:hover{transform:translateY(-3px); box-shadow:0 12px 28px rgba(23,50,77,.13)}
+  .icon{font-size:2rem}
+  .pill{display:inline-block; padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--accent); font-weight:800; font-size:.86rem}
+  .btn{
+    display:inline-block; background:var(--accent); color:white; border:0; border-radius:14px;
+    padding:12px 18px; font-weight:800; cursor:pointer; text-decoration:none; margin:5px 6px 5px 0
+  }
+  .btn.alt{background:var(--accent2); color:#2f2317}
+  .btn.light{background:white;color:var(--accent)}
+  .section{
+    background:white; padding:26px; border-radius:24px; margin:18px 0; border:1px solid var(--line)
+  }
+  .question{
+    background:var(--soft2); border-left:6px solid var(--accent2); padding:16px 18px; border-radius:14px; margin:12px 0
+  }
+  .step{display:flex; gap:15px; align-items:flex-start; margin:16px 0}
+  .num{
+    min-width:38px; height:38px; border-radius:50%; display:grid; place-items:center;
+    background:var(--accent); color:white; font-weight:900
+  }
+  ul{padding-left:1.25rem}
+  table{width:100%; border-collapse:collapse; background:white; border-radius:14px; overflow:hidden}
+  th,td{border:1px solid var(--line); padding:12px; vertical-align:top}
+  th{background:#eef6f2}
+  .progress-wrap{height:8px; background:#e7edf0; border-radius:999px; overflow:hidden; margin-top:8px}
+  .progress{height:100%; width:11%; background:var(--accent); transition:.25s}
+  .modal{
+    position:fixed; inset:0; background:rgba(8,22,34,.58); display:none; place-items:center; z-index:100; padding:20px
+  }
+  .modal.open{display:grid}
+  .modal-box{
+    width:min(700px,96vw); max-height:85vh; overflow:auto; background:white; border-radius:24px; padding:26px;
+    box-shadow:0 20px 60px rgba(0,0,0,.25)
+  }
+  .close{float:right; border:0; background:#eef3f6; border-radius:50%; width:36px; height:36px; cursor:pointer; font-size:18px}
+  .reflect button{
+    width:100%; text-align:left; margin:7px 0; padding:14px; border:1px solid var(--line); border-radius:14px;
+    background:white; cursor:pointer; font-weight:700; color:var(--ink)
+  }
+  .reflect button:hover{background:var(--soft)}
+  .answer-box{display:none; margin-top:12px; padding:14px; background:var(--soft); border-radius:14px}
+  .small{font-size:.92rem;color:#496173}
+  footer{padding:24px 18px; text-align:center; color:#627b8b}
+  @media (max-width:640px){
+    .hero{padding:34px 22px}
+    .nav{justify-content:center}
+    .brand{width:100%; text-align:center; margin:0 0 5px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="brand">Our Community, Our Stories</div>
+    <button data-page="home" class="active">Home</button>
+    <button data-page="task">Task</button>
+    <button data-page="process">Process</button>
+    <button data-page="resources">Resources</button>
+    <button data-page="evaluation">Evaluation</button>
+    <button data-page="teacher">Teacher Page</button>
+    <div style="width:100%" class="progress-wrap"><div class="progress" id="progress"></div></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="home" class="page active">
+  <div class="hero">
+    <span class="pill" style="background:rgba(255,255,255,.18);color:white">Grades 3–5 • Interactive WebQuest</span>
+    <h1>Our Community, Our Stories</h1>
+    <p class="subtitle">Become a Community Explorer. Discover how people, places, traditions, and experiences make communities unique—then create a digital project about a community that matters to you.</p>
+    <button class="btn light go" data-page="task">Begin the WebQuest →</button>
+  </div>
+
+  <div class="section">
+    <h2>Essential Question</h2>
+    <div class="question"><strong>How do people, places, traditions, and experiences make a community unique?</strong></div>
+  </div>
+
+  <div class="grid">
+    <div class="card clickable" onclick="showModal('Neighborhood','A neighborhood is a community connected by place. People may share parks, schools, businesses, events, and local traditions.')"><div class="icon">🏠</div><h3>Neighborhood</h3><p>Explore the people and places around you.</p></div>
+    <div class="card clickable" onclick="showModal('School','A school is a community where students, teachers, staff, and families share goals, traditions, responsibilities, and experiences.')"><div class="icon">🏫</div><h3>School</h3><p>Think about routines, traditions, and shared goals.</p></div>
+    <div class="card clickable" onclick="showModal('Family','Families can have traditions, languages, foods, stories, celebrations, and routines that help shape identity.')"><div class="icon">👨‍👩‍👧‍👦</div><h3>Family</h3><p>Share only what you feel comfortable sharing.</p></div>
+    <div class="card clickable" onclick="showModal('Interest Group','Teams, clubs, gaming groups, music groups, and hobby communities can all be meaningful communities.')"><div class="icon">🎨</div><h3>Interests</h3><p>Communities can form around what people enjoy.</p></div>
+  </div>
+</section>
+
+<section id="task" class="page">
+  <h2>Your Mission</h2>
+  <div class="section">
+    <span class="pill">Task</span>
+    <h3>Create “A Community That Matters”</h3>
+    <p>Choose one community that you would like other people to learn about. Your final product should be a <strong>4–6 slide presentation or equivalent digital project.</strong></p>
+  </div>
+
+  <div class="grid">
+    <div class="card clickable" onclick="showModal('Question 1','What community did you choose?')"><div class="num">1</div><h3>Community</h3><p>What did you choose?</p></div>
+    <div class="card clickable" onclick="showModal('Question 2','Who are some of the people who make up this community?')"><div class="num">2</div><h3>People</h3><p>Who belongs?</p></div>
+    <div class="card clickable" onclick="showModal('Question 3','What places are important to this community?')"><div class="num">3</div><h3>Places</h3><p>Where does it happen?</p></div>
+    <div class="card clickable" onclick="showModal('Question 4','What traditions, activities, foods, celebrations, stories, languages, music, art, or other characteristics are meaningful?')"><div class="num">4</div><h3>Traditions</h3><p>What makes it special?</p></div>
+    <div class="card clickable" onclick="showModal('Question 5','What is something other people might not know about this community?')"><div class="num">5</div><h3>Interesting Fact</h3><p>Teach us something new.</p></div>
+    <div class="card clickable" onclick="showModal('Question 6','Why is this community important to you or to the people who belong to it?')"><div class="num">6</div><h3>Connection</h3><p>Why does it matter?</p></div>
+  </div>
+
+  <div class="question"><strong>Important:</strong> You are never required to share private information about your family, religion, culture, language, immigration history, or other personal experiences.</div>
+  <button class="btn go" data-page="process">Next: Start the Process →</button>
+</section>
+
+<section id="process" class="page">
+  <h2>Process</h2>
+
+  <div class="section">
+    <div class="step"><div class="num">1</div><div><h3>Explore Communities</h3><p>Look at examples of communities. Notice people, places, traditions, activities, similarities, and differences.</p></div></div>
+    <div class="grid">
+      <div class="card clickable" onclick="showModal('People','Family members, neighbors, teachers, leaders, friends, teammates, volunteers, and other community members.')"><div class="icon">👥</div><h3>People</h3></div>
+      <div class="card clickable" onclick="showModal('Places','Homes, schools, parks, businesses, places of worship, community centers, landmarks, and gathering spaces.')"><div class="icon">📍</div><h3>Places</h3></div>
+      <div class="card clickable" onclick="showModal('Traditions','Celebrations, foods, music, art, sports, holidays, customs, stories, and routines.')"><div class="icon">🎉</div><h3>Traditions</h3></div>
+      <div class="card clickable" onclick="showModal('Experiences','Events, challenges, achievements, memories, shared activities, and community changes.')"><div class="icon">✨</div><h3>Experiences</h3></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="step"><div class="num">2</div><div><h3>Choose Your Community</h3><p>Pick a community that is meaningful to you and that you are comfortable sharing.</p></div></div>
+    <div class="question">Complete: <strong>“I want to teach people about __________ because __________.”</strong></div>
+  </div>
+
+  <div class="section">
+    <div class="step"><div class="num">3</div><div><h3>Investigate</h3><p>Gather information from reliable websites, classroom books, maps, primary sources, personal knowledge, or an interview when appropriate.</p></div></div>
+    <div class="grid">
+      <div class="card clickable" onclick="showModal('People','Who helps make this community special?')"><h3>People</h3></div>
+      <div class="card clickable" onclick="showModal('Places','What locations are important?')"><h3>Places</h3></div>
+      <div class="card clickable" onclick="showModal('Traditions & Activities','What do community members do together?')"><h3>Traditions & Activities</h3></div>
+      <div class="card clickable" onclick="showModal('Culture & Expression','Are there important foods, languages, art, music, clothing, celebrations, stories, or customs?')"><h3>Culture & Expression</h3></div>
+      <div class="card clickable" onclick="showModal('Interesting Fact','What might someone outside this community not know?')"><h3>Interesting Fact</h3></div>
+      <div class="card clickable" onclick="showModal('Connection','Why does this community matter?')"><h3>Connection</h3></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="step"><div class="num">4</div><div><h3>Create Your Digital Project</h3><p>Create a 4–6 slide presentation, short video, digital poster, narrated slideshow, or another teacher-approved product.</p></div></div>
+    <div class="grid">
+      <div class="card clickable" onclick="showModal('Write','Use short explanations, labels, captions, or paragraphs.')"><div class="icon">✍️</div><h3>Write</h3></div>
+      <div class="card clickable" onclick="showModal('Draw','Use original drawings, diagrams, or illustrated maps.')"><div class="icon">🎨</div><h3>Draw</h3></div>
+      <div class="card clickable" onclick="showModal('Speak','Record narration or present orally.')"><div class="icon">🎙️</div><h3>Speak</h3></div>
+      <div class="card clickable" onclick="showModal('Design','Use photographs, icons, maps, layout, and visual organization.')"><div class="icon">🖼️</div><h3>Design</h3></div>
+    </div>
+    <p><strong>Your project should include:</strong> community name, important people, important places, traditions or activities, at least one interesting fact, why the community matters, and useful visuals.</p>
+  </div>
+
+  <div class="section">
+    <div class="step"><div class="num">5</div><div><h3>Share and Learn</h3><p>Share with a partner, group, or class. Identify one thing you learned and one connection between your community and someone else’s.</p></div></div>
+  </div>
+
+  <button class="btn go" data-page="resources">Next: Resources →</button>
+</section>
+
+<section id="resources" class="page">
+  <h2>Community Explorer Toolkit</h2>
+  <p>Use these resources to investigate communities and gather ideas.</p>
+
+  <div class="grid">
+    <div class="card"><h3>Library of Congress — Community: People and Places</h3><p>Explore photographs and primary sources showing people, places, and activities.</p><a class="btn" target="_blank" rel="noopener" href="https://www.loc.gov/classroom-materials/community-people-and-places/">Visit Resource</a></div>
+    <div class="card"><h3>Library of Congress — Exploring Community Through Local History</h3><p>Learn how landmarks, traditions, businesses, food, and stories help tell a community’s history.</p><a class="btn" target="_blank" rel="noopener" href="https://www.loc.gov/classroom-materials/exploring-community-through-local-history-oral-stories-landmarks-and-traditions/">Visit Resource</a></div>
+    <div class="card"><h3>Library of Congress — Family Customs Past and Present</h3><p>Explore examples of customs and traditions from different families and cultural groups.</p><a class="btn" target="_blank" rel="noopener" href="https://www.loc.gov/classroom-materials/family-customs-past-and-present-exploring-cultural-rituals/">Visit Resource</a></div>
+    <div class="card"><h3>Smithsonian Learning Resources</h3><p>Explore culture, art, science, history, traditions, and stories.</p><a class="btn" target="_blank" rel="noopener" href="https://www.si.edu/learn">Visit Resource</a></div>
+    <div class="card"><h3>Google Earth</h3><p>Explore neighborhoods, landmarks, cities, states, countries, and community locations.</p><a class="btn" target="_blank" rel="noopener" href="https://earth.google.com/">Explore the World</a></div>
+  </div>
+  <button class="btn go" data-page="evaluation">Next: Evaluation →</button>
+</section>
+
+<section id="evaluation" class="page">
+  <h2>Evaluation & Conclusion</h2>
+  <div class="section">
+    <h3>Rubric — 20 Points Possible</h3>
+    <div style="overflow-x:auto">
+    <table>
+      <tr><th>Category</th><th>4 — Excellent</th><th>3 — Proficient</th><th>2 — Developing</th><th>1 — Beginning</th></tr>
+      <tr><td><strong>Community Content</strong></td><td>Clearly explains the community using several specific examples.</td><td>Explains the community using appropriate examples.</td><td>Some information is included but needs more detail.</td><td>Very limited information.</td></tr>
+      <tr><td><strong>Cultural Awareness & Respect</strong></td><td>Strong respect for differences and helps others understand the community.</td><td>Shows respect and provides useful information.</td><td>Some awareness, but explanation is limited.</td><td>Little evidence of cultural awareness.</td></tr>
+      <tr><td><strong>Use of Technology</strong></td><td>Technology strongly supports the message through effective media.</td><td>Technology is used appropriately.</td><td>Technology is present but does not always support the message.</td><td>Minimal or incomplete use of technology.</td></tr>
+      <tr><td><strong>Creativity & Communication</strong></td><td>Clear, engaging, organized, and creative.</td><td>Clear and organized.</td><td>Some information is unclear or disorganized.</td><td>Difficult to understand or incomplete.</td></tr>
+      <tr><td><strong>Reflection & Connection</strong></td><td>Clearly explains why the community matters and identifies a meaningful connection.</td><td>Explains why it matters and identifies a connection.</td><td>Limited reflection or connection.</td><td>Reflection or connection is missing.</td></tr>
+    </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Final Reflection</h3>
+    <p>Choose one question. Click it to reveal a writing prompt.</p>
+    <div class="reflect">
+      <button onclick="toggleAns('a1')">1. What did you learn about a community that you did not know before?</button>
+      <div id="a1" class="answer-box">Start with: <strong>“Before this WebQuest, I did not know… Now I understand…”</strong></div>
+      <button onclick="toggleAns('a2')">2. What similarity did you discover between two different communities?</button>
+      <div id="a2" class="answer-box">Start with: <strong>“Two communities that had something in common were… They both…”</strong></div>
+      <button onclick="toggleAns('a3')">3. Why is it important to learn about communities that may be different from our own?</button>
+      <div id="a3" class="answer-box">Start with: <strong>“Learning about different communities is important because…”</strong></div>
+      <button onclick="toggleAns('a4')">4. How can technology help people share their culture, experiences, and stories?</button>
+      <div id="a4" class="answer-box">Start with: <strong>“Technology can help people share their stories by…”</strong></div>
+    </div>
+  </div>
+
+  <div class="question"><strong>Big idea:</strong> Communities may look different, but people often share similar needs for belonging, friendship, safety, identity, support, and opportunities to contribute.</div>
+  <button class="btn go" data-page="teacher">Teacher Page →</button>
+</section>
+
+<section id="teacher" class="page">
+  <h2>Teacher Page</h2>
+  <div class="section">
+    <p><strong>Title:</strong> Our Community, Our Stories</p>
+    <p><strong>Grade Level:</strong> 3–5</p>
+    <p><strong>Subjects:</strong> Social Studies, English Language Arts, Technology</p>
+    <p><strong>Estimated Time:</strong> Two 40–45 minute instructional periods</p>
+  </div>
+
+  <div class="section">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Identify characteristics that help define a community.</li>
+      <li>Examine similarities and differences among communities.</li>
+      <li>Use digital resources to gather information.</li>
+      <li>Create a multimedia product to communicate information.</li>
+      <li>Demonstrate respect for cultural and individual differences.</li>
+      <li>Reflect on connections between their own experiences and those of others.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Why This Lesson Is Culturally Supportive</h3>
+    <p>This WebQuest was designed around Chisholm’s (1998) six culturally supportive elements for technology integration. Click each element below.</p>
+    <div class="grid">
+      <div class="card clickable" onclick="showModal('Cultural Awareness','Students examine different communities and recognize differences in traditions, languages, backgrounds, interests, experiences, and ways of expressing themselves. They also identify similarities among communities.')"><h3>Cultural Awareness</h3><p>Recognizing differences and similarities.</p></div>
+      <div class="card clickable" onclick="showModal('Cultural Relevance','Students choose a community that has personal meaning to them. This can connect classroom learning to families, neighborhoods, cultures, schools, interests, hobbies, teams, and other meaningful groups.')"><h3>Cultural Relevance</h3><p>Connecting learning to student experience.</p></div>
+      <div class="card clickable" onclick="showModal('Culturally Supportive Environment','Students are given choice, respectful discussion norms, and control over what they share. They are never required to disclose private information about culture, family, religion, language, ethnicity, or immigration history.')"><h3>Supportive Environment</h3><p>Safe, inclusive, and respectful.</p></div>
+      <div class="card clickable" onclick="showModal('Equitable Access','Students can use school-provided technology, classroom resources, printed materials, and teacher-selected resources so success is not dependent on home technology access.')"><h3>Equitable Access</h3><p>Multiple ways to access learning.</p></div>
+      <div class="card clickable" onclick="showModal('Instructional Flexibility','Students may communicate learning through writing, photographs, drawings, maps, narration, video, symbols, translated vocabulary, speech-to-text, or text-to-speech.')"><h3>Instructional Flexibility</h3><p>Multiple ways to learn and demonstrate understanding.</p></div>
+      <div class="card clickable" onclick="showModal('Instructional Integration','Technology is used to research, explore geographic locations, examine primary sources, organize information, communicate ideas, and create a meaningful final product. It is part of the learning process, not an add-on.')"><h3>Instructional Integration</h3><p>Technology with a clear instructional purpose.</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Cultural Relevance & Awareness</h3>
+    <p>Chisholm (1998) emphasizes connecting technology-supported instruction with students’ backgrounds, prior experiences, knowledge, interests, and learning needs. This lesson gives students ownership over what community they investigate and how they communicate what they learn.</p>
+    <p>Students can draw on families, neighborhoods, interests, experiences, languages, hobbies, cultures, and communities as legitimate sources of knowledge. At the same time, students are not required to act as representatives of a racial, ethnic, religious, or cultural group. They may instead investigate a school, neighborhood, sports team, military community, hobby group, or another meaningful community.</p>
+    <p>This combination of <strong>choice, representation, accessibility, and respectful exploration</strong> helps create a culturally supportive learning experience.</p>
+  </div>
+
+  <div class="section">
+    <h3>Differentiation & Accommodations</h3>
+    <ul>
+      <li>Speech-to-text and text-to-speech.</li>
+      <li>Recorded responses instead of extensive writing.</li>
+      <li>Drawings instead of photographs.</li>
+      <li>Graphic organizers and sentence starters.</li>
+      <li>Partner work when appropriate.</li>
+      <li>Translated vocabulary or use of a home language.</li>
+      <li>Teacher-selected simplified resources.</li>
+      <li>Printed materials when Internet access is unavailable.</li>
+      <li>Private presentation to the teacher when appropriate.</li>
+      <li>A nondigital alternative when technology creates an accessibility barrier.</li>
+    </ul>
+    <p><strong>Suggested respectful response stems:</strong></p>
+    <ul>
+      <li>“One thing I learned was…”</li>
+      <li>“Something our communities have in common is…”</li>
+      <li>“One difference I noticed was…”</li>
+      <li>“I would like to learn more about…”</li>
+      <li>“Thank you for teaching me about…”</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>References</h3>
+    <p>Chisholm, I. M. (1998). Six elements for technology integration in multicultural classrooms. <em>Journal of Information Technology for Teacher Education, 7</em>(2), 247–268.</p>
+    <p>Chisholm, I. M., & Wetzel, K. (2001). Technology and multiculturalism in the classroom: Case studies in attitudes and motivations. <em>Journal of Research on Computing in Education, 33</em>(5), 1–33.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal()">×</button>
+    <h2 id="modalTitle"></h2>
+    <p id="modalText"></p>
+  </div>
+</div>
+
+<footer>
+  Interactive WebQuest • Our Community, Our Stories
+</footer>
+
+<script>
+const pages=[...document.querySelectorAll('.page')];
+const navButtons=[...document.querySelectorAll('.nav button[data-page]')];
+const progress=document.getElementById('progress');
+
+function openPage(id){
+  pages.forEach(p=>p.classList.toggle('active',p.id===id));
+  navButtons.forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+  const idx=pages.findIndex(p=>p.id===id);
+  progress.style.width=((idx+1)/pages.length*100)+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('[data-page]').forEach(el=>{
+  el.addEventListener('click',()=>openPage(el.dataset.page));
+});
+
+function showModal(title,text){
+  document.getElementById('modalTitle').textContent=title;
+  document.getElementById('modalText').textContent=text;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+function toggleAns(id){
+  const el=document.getElementById(id);
+  el.style.display=el.style.display==='block'?'none':'block';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+</script>
+</body>
+</html>
